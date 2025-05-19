@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Moodify - Your AI Spotify Mood Companion</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="container">
+
+  <div id="auth-buttons" role="navigation" aria-label="Authentication buttons">
+    <!-- Removed Sign Up and Log In buttons -->
+  </div>
+
+  <section id="landing-page" aria-label="Moodify Landing Page">
+    <div id="hero" role="banner">
+      <h1>Moodify</h1>
+      <p>Your personalized playlist AI</p>
+    </div>
+
+    <div id="prototype-preview" aria-label="App prototype preview showing the chatbot interface and playlist recommendation" tabindex="0">
+
+      <!-- Phone device with preview chat -->
+      <article class="device phone" aria-label="Phone preview of Moodify chatbot">
+        <div class="screen">
+          <div class="preview-chat" aria-live="off" aria-atomic="false" tabindex="0" role="log" aria-relevant="additions">
+            <div class="bot-msg" style="animation-delay: 0.2s">Hey! I'm Mr Moody 😎 How are you feeling today?</div>
+            <div class="user-msg" style="animation-delay: 0.6s">Feeling excited and happy!</div>
+            <div class="bot-msg" style="animation-delay: 1.0s">Awesome! Let me find you some playlists that match your vibe 🎶</div>
+          </div>
+          <div class="playlist-preview" aria-label="Playlist recommendation preview">
+            <h4>Feel Good Indie 🎉</h4>
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DWUa8ZRTfalHk" allow="encrypted-media" loading="lazy" title="Feel Good Indie playlist"></iframe>
+          </div>
+        </div>
+      </article>
+
+      <!-- Laptop device with preview chat + playlists -->
+      <article class="device laptop" aria-label="Laptop preview of Moodify chatbot and playlists">
+        <div class="screen" style="padding: 20px 28px 24px;">
+          <div class="preview-chat" style="height: 350px;" aria-live="off" aria-atomic="false" tabindex="0" role="log" aria-relevant="additions">
+            <div class="bot-msg" style="animation-delay: 0.2s">Hi there! Mr Moody here 👋 Tell me how you're feeling.</div>
+            <div class="user-msg" style="animation-delay: 0.7s">A bit anxious and stressed lately.</div>
+            <div class="bot-msg" style="animation-delay: 1.2s">I got you. Here's a calm playlist to help unwind 🧘‍♂</div>
+          </div>
+          <div class="playlist-preview" aria-label="Peaceful Piano playlist preview" style="margin-bottom: 18px;">
+            <h4>Peaceful Piano 🎹</h4>
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO" allow="encrypted-media" loading="lazy" title="Peaceful Piano playlist"></iframe>
+          </div>
+          <div class="playlist-preview" aria-label="Relax & Unwind playlist preview">
+            <h4>Relax & Unwind 🧘</h4>
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX3Ogo9pFvBkY" allow="encrypted-media" loading="lazy" title="Relax & Unwind playlist"></iframe>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <section id="reviews" aria-label="User reviews and testimonials">
+      <h2>What Our Users Say</h2>
+      <div class="review-list">
+        <div class="review" tabindex="0">
+          <p class="review-text">"Moodify totally gets me. The playlists feel like someone handpicked songs just for my mood every single time."</p>
+          <div class="reviewer" aria-label="Reviewer: Jamie D, 5 stars">
+            <span>Jamie D</span>
+            <span class="stars" aria-hidden="true">★★★★★</span>
+          </div>
+        </div>
+        <div class="review" tabindex="0">
+          <p class="review-text">"Mr Moody is like my emotional DJ. I love how the chatbot is friendly and really listens."</p>
+          <div class="reviewer" aria-label="Reviewer: Alex P, 5 stars">
+            <span>Alex P</span>
+            <span class="stars" aria-hidden="true">★★★★★</span>
+          </div>
+        </div>
+        <div class="review" tabindex="0">
+          <p class="review-text">"The vibrant colors and smooth UI made me immediately trust it. Even better - the playlist recommendations really work!"</p>
+          <div class="reviewer" aria-label="Reviewer: Priya S, 5 stars">
+            <span>Priya S</span>
+            <span class="stars" aria-hidden="true">★★★★★</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- AI Icon to open the chatbot -->
+  <button id="ai-icon" aria-label="Open chat with Mr Moody" title="Chat with Mr Moody" tabindex="0">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <!-- Head -->
+      <circle cx="32" cy="32" r="28" stroke="white" stroke-width="3" fill="none"/>
+      <!-- Eyes -->
+      <circle cx="22" cy="26" r="4" fill="white"/>
+      <circle cx="42" cy="26" r="4" fill="white"/>
+      <!-- Mouth -->
+      <path d="M22 42 Q32 52 42 42" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Antenna left -->
+      <line x1="18" y1="10" x2="22" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <!-- Antenna right -->
+      <line x1="46" y1="10" x2="42" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- Add a blur overlay for when the chat is open -->
+  <div id="blur-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9998; backdrop-filter: blur(10px); background:rgba(24,24,24,0.35);"></div>
+
+  <!-- Chat Application Section -->
+  <section id="app" style="display:none; opacity: 0; transition: opacity 0.3s ease; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999; pointer-events:none;">
+    <div id="chatbox-center"
+      style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      border-radius:18px; box-shadow:0 6px 32px #000a; width:95vw; max-width:400px;
+      min-height:420px; max-height:90vh; display:flex; flex-direction:column;
+      pointer-events:auto; transition:background 0.4s; background:#232323;">
+      <header style="padding:18px 24px 12px 24px; font-size:1.15em; font-weight:bold; color:#fff; border-radius:18px 18px 0 0; background:#191919;">
+        🎧 Moodify - Chat with Mr Moody
+        <button id="close-chat" aria-label="Close chat" title="Close chat" style="float:right; background:none; border:none; color:#fff; font-size:1.1em; cursor:pointer;">✖</button>
+      </header>
+      <div id="chat-window" style="flex:1; overflow-y:auto; padding:18px 18px 0 18px; background:none; min-height:0; max-height:calc(60vh - 80px);"></div>
+      <form id="chat-form" style="display:flex; gap:8px; align-items:center; padding:16px 18px 18px 18px; background:none;" role="search" aria-label="Send a message to Mr Moody">
+        <input type="text" id="user-input" autocomplete="off" placeholder="Type your message here..." aria-required="true" aria-label="User message input" style="flex:1; border-radius:18px; border:none; padding:10px 16px; font-size:1em;"/>
+        <button type="submit" aria-label="Send message" style="padding:8px 18px; border-radius:16px; background:#1db954; color:#fff; border:none; font-size:1em; cursor:pointer;">Send</button>
+      </form>
+      <div id="playlist-suggestion" style="overflow-y:auto; max-height:110px; padding:0 18px 10px 18px;"></div>
+      <div class="footer" style="text-align:center; color:#aaa; font-size:0.95em; padding-bottom:10px;">Moodify &copy; 2024 - Powered by Mr Moody AI</div>
+    </div>
+  </section>
+
+  <!-- Chat popup message above AI icon -->
+  <div id="chat-popup" aria-hidden="true">Chat with Mr Moody</div>
+
+</div>
+
+<script src="app.js"></script>
+<script>
+  const chatApp = document.getElementById('app');
+  const closeChatButton = document.getElementById('close-chat');
+  const aiIcon = document.getElementById('ai-icon');
+  const blurOverlay = document.getElementById('blur-overlay');
+  const chatboxCenter = document.getElementById('chatbox-center');
+  const chatWindow = document.getElementById('chat-window');
+
+  // Initialize chatbot state
+  document.addEventListener('DOMContentLoaded', () => {
+    const isChatOpen = localStorage.getItem('chatOpen') === 'true';
+    chatApp.style.display = isChatOpen ? 'block' : 'none';
+    chatApp.style.opacity = isChatOpen ? '1' : '0';
+    if (isChatOpen) {
+      chatApp.style.position = 'fixed';
+      chatApp.style.top = '0';
+      chatApp.style.left = '0';
+      chatApp.style.width = '100vw';
+      chatApp.style.height = '100vh';
+      chatApp.style.zIndex = '9999';
+      chatApp.style.background = '#181818';
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openChat') === '1') {
+      openChatFullscreen();
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  });
+
+  function openChatFullscreen() {
+    blurOverlay.style.display = 'block';
+    chatApp.style.display = 'block';
+    setTimeout(() => {
+      chatApp.style.opacity = '1';
+    }, 10);
+    chatApp.style.pointerEvents = 'auto';
+    localStorage.setItem('chatOpen', 'true');
+    // Speak greeting when chat opens
+    setTimeout(speakGreeting, 300); // Delay to allow user gesture
+  }
+
+  function closeChat() {
+    chatApp.style.opacity = '0';
+    blurOverlay.style.display = 'none';
+    setTimeout(() => {
+      chatApp.style.display = 'none';
+      chatApp.style.pointerEvents = 'none';
+      localStorage.setItem('chatOpen', 'false');
+    }, 300);
+  }
+
+  closeChatButton.addEventListener('click', closeChat);
+
+  aiIcon.addEventListener('click', () => {
+    openChatFullscreen();
+  });
+
+  // Emotion color mapping
+  const emotionColors = {
+    angry: "#c0392b",
+    mad: "#c0392b",
+    furious: "#c0392b",
+    rage: "#c0392b",
+    sad: "#2980b9",
+    blue: "#2980b9",
+    down: "#2980b9",
+    empty: "#34495e",
+    lonely: "#34495e",
+    heartbroken: "#8e44ad",
+    breakup: "#8e44ad",
+    lost: "#34495e",
+    happy: "#27ae60",
+    excited: "#27ae60",
+    joyful: "#27ae60",
+    joy: "#27ae60",
+    grateful: "#27ae60",
+    calm: "#16a085",
+    relaxed: "#16a085",
+    peaceful: "#16a085",
+    anxious: "#f39c12",
+    nervous: "#f39c12",
+    stressed: "#e67e22",
+    tired: "#7f8c8d",
+    bored: "#7f8c8d",
+    energetic: "#f1c40f",
+    motivated: "#f1c40f",
+    // Add more as needed
+  };
+
+  // Simple emotion extraction using keywords and context
+  function extractEmotion(text) {
+    text = text.toLowerCase();
+    // Try to match keywords in the text
+    for (const [emotion, color] of Object.entries(emotionColors)) {
+      if (text.includes(emotion)) return emotion;
+    }
+    // Try to match common phrases
+    if (/heart\s?break|broken\s?heart|break\s?up/.test(text)) return "heartbroken";
+    if (/lost|empty|alone|lonely/.test(text)) return "empty";
+    if (/passed away|died|loss|funeral/.test(text)) return "lost";
+    // Fallbacks
+    if (/angry|mad|furious|rage/.test(text)) return "angry";
+    if (/sad|down|blue/.test(text)) return "sad";
+    if (/happy|excited|joy|grateful/.test(text)) return "happy";
+    if (/calm|relaxed|peaceful/.test(text)) return "calm";
+    if (/anxious|nervous/.test(text)) return "anxious";
+    if (/stressed/.test(text)) return "stressed";
+    if (/tired|bored/.test(text)) return "tired";
+    if (/energetic|motivated/.test(text)) return "energetic";
+    return null;
+  }
+
+  // Set chatbox background color based on emotion (fix for inline style)
+  function setChatboxEmotion(emotion) {
+    const color = emotionColors[emotion] || "#232323";
+    chatboxCenter.style.background = color;
+  }
+
+  // --- Chat bubbles rendering ---
+  function renderChatBubble(message, from) {
+    const bubble = document.createElement('div');
+    bubble.className = from === 'user' ? 'chat-bubble user-bubble' : 'chat-bubble bot-bubble';
+    bubble.innerText = message;
+    chatWindow.appendChild(bubble);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  // --- Chat logic with improved conversational flow ---
+  let lastEmotion = null;
+  let awaitingFollowup = false;
+  let awaitingReason = false;
+
+  document.getElementById('chat-form').onsubmit = function(e) {
+    e.preventDefault();
+    const input = document.getElementById('user-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    renderChatBubble(msg, 'user');
+    input.value = '';
+
+    // Clear previous playlist suggestion before new recommendation
+    document.getElementById('playlist-suggestion').innerHTML = "";
+
+    // If awaiting followup, use the answer to refine playlist
+    if (awaitingFollowup && lastEmotion) {
+      awaitingFollowup = false;
+      let playlistHtml = "";
+      if (lastEmotion === "sad" || lastEmotion === "empty" || lastEmotion === "lost" || lastEmotion === "heartbroken") {
+        if (/breakup|heartbreak|relationship|love|ex|boyfriend|girlfriend|partner/.test(msg.toLowerCase())) {
+          playlistHtml = `
+            <div style="margin-top:10px;">
+              <strong>Heartbreak Healing Playlist:</strong>
+              <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX7qK8ma5wgG1" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>
+            </div>
+          `;
+          renderChatBubble("I'm sorry to hear about your heartbreak. Here's a playlist to help you heal. 💜", 'bot');
+        } else if (/died|loss|passed away|funeral|grief|family|relative|friend/.test(msg.toLowerCase())) {
+          playlistHtml = `
+            <div style="margin-top:10px;">
+              <strong>Comfort for Loss Playlist:</strong>
+              <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX3YSRoSdA634" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>
+            </div>
+          `;
+          renderChatBubble("Losing someone is never easy. Here's something gentle for you. 🕊️", 'bot');
+        } else {
+          playlistHtml = `
+            <div style="margin-top:10px;">
+              <strong>Feel Better Playlist:</strong>
+              <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX3rxVfibe1L0" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>
+            </div>
+          `;
+          renderChatBubble("Here's something to lift your spirits. 💚", 'bot');
+        }
+        // Ensure the suggestion is rendered
+        setTimeout(() => {
+          document.getElementById('playlist-suggestion').innerHTML = playlistHtml;
+        }, 100);
+        setChatboxEmotion(lastEmotion);
+        return;
+      }
+      // For positive emotions, recommend playlist if user says yes
+      if (["happy", "excited", "joyful", "grateful", "calm", "relaxed", "peaceful", "energetic", "motivated"].includes(lastEmotion)) {
+        if (/yes|sure|ok|please|yeah|yep|yup|of course|alright|why not|go ahead/i.test(msg)) {
+          playlistHtml = `
+            <div style="margin-top:10px;">
+              <strong>Feel Good Vibes Playlist:</strong>
+              <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC" width="100%" height="80" frameborder="0" allow="encrypted-media"></iframe>
+            </div>
+          `;
+          renderChatBubble("Here's a playlist to match your mood! 🎉", 'bot');
+          setTimeout(() => {
+            document.getElementById('playlist-suggestion').innerHTML = playlistHtml;
+          }, 100);
+          setChatboxEmotion(lastEmotion);
+        } else {
+          renderChatBubble("Alright! Let me know if you want a playlist anytime.", 'bot');
+        }
+        return;
+      }
+    }
+
+    // If awaiting reason for emotion, ask for more detail before recommending
+    if (awaitingReason && lastEmotion) {
+      awaitingReason = false;
+      renderChatBubble("Thank you for sharing. Would you like some music to match or improve your mood?", 'bot');
+      awaitingFollowup = true;
+      return;
+    }
+
+    // Detect emotion from user message
+    const emotion = extractEmotion(msg);
+    if (emotion) {
+      lastEmotion = emotion;
+      setChatboxEmotion(emotion);
+      if (["sad", "empty", "lost", "heartbroken", "angry", "anxious", "stressed", "tired", "bored"].includes(emotion)) {
+        renderChatBubble("I'm here for you. Can you tell me more about what's making you feel this way?", 'bot');
+        awaitingReason = true;
+        return;
+      }
+      if (["happy", "excited", "joyful", "grateful", "calm", "relaxed", "peaceful", "energetic", "motivated"].includes(emotion)) {
+        renderChatBubble("That's great! Would you like a playlist to match your mood?", 'bot');
+        awaitingFollowup = true;
+        return;
+      }
+    }
+
+    // If no emotion detected, fallback
+    renderChatBubble("Tell me more about how you're feeling, and I'll find the perfect playlist for you.", 'bot');
+    setChatboxEmotion(null);
+    document.getElementById('playlist-suggestion').innerHTML = "";
+  }
+
+  // --- Chat bubble styles ---
+  const style = document.createElement('style');
+  style.textContent = `
+    .chat-bubble {
+      display: inline-block;
+      max-width: 80%;
+      margin-bottom: 10px;
+      padding: 10px 16px;
+      border-radius: 18px;
+      font-size: 1em;
+      line-height: 1.5;
+      word-break: break-word;
+      box-shadow: 0 2px 8px #0002;
+      clear: both;
+      position: relative;
+      animation: fadeInBubble 0.3s;
+    }
+    .user-bubble {
+      background: #1db954;
+      color: #fff;
+      margin-left: 20%;
+      align-self: flex-end;
+      text-align: right;
+    }
+    .bot-bubble {
+      background: #232323;
+      color: #fff;
+      margin-right: 20%;
+      align-self: flex-start;
+      text-align: left;
+    }
+    @keyframes fadeInBubble {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>
